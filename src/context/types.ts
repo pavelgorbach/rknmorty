@@ -1,24 +1,24 @@
-export type URL = string
-type Name = string
 export type Status = 'alive' | 'dead' | 'unknown' | '' 
+
 type Gender = 'female' | 'male' | 'genderless' | 'unknown' | ''
+
 type Origin = {
-  name: Name 
-  link: URL 
+  name: string 
+  link: string 
 }
 
 export type Character = Readonly<{
   id: string
-  name: Name 
+  name: string 
   status: Status 
   species: string 
   type: string
   gender: Gender
   origin: Origin
   location: Origin
-  image: URL
-  episode: URL[] 
-  url: URL
+  image: string 
+  episode: string[] 
+  url: string 
   created: string 
 }>
 
@@ -27,20 +27,14 @@ export type FilterParams = Readonly<Pick<Character, 'name' | 'status' | 'species
 export type Info = {
   count: number
   pages: number
-  next: URL | null 
-  prev: URL | null
+  next: string | null 
+  prev: string | null
 }
 
 export type Characters = {
   info: Info
   items: {
     [id: string]: Character
-  }
-}
-
-export type State = {
-  filter: FilterParams
-  characters: Characters 
-  loading: boolean,
-  filtered: boolean
+  },
+  ids: string[]
 }

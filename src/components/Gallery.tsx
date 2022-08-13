@@ -1,51 +1,64 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useCallback } from "react"
+
 import { getCharacters } from "../api"
 import { AppContext } from "../context/AppProvider"
-import useDebouncedValue from "../hooks/useDebounceValue"
+import { debounce } from "../utils"
 import Empty from "./Empty"
 import Loader from "./Loader"
 import Button from "./Button"
 import GalleryItem from "./GalleryItem"
+
 import styles from './Gallery.module.css'
 
 function Gallery() {
   const { state, dispatch } = useContext(AppContext)
-  const debouncedFilterParams = useDebouncedValue(state.filter)
+
+  const loadData = useCallback(
+    debounce(async (filterParams) => {
+      try {
+        const data = await getCharacters(filterParams)
+        console.log({ data })
+        dispatch({ type: 'SET_CHARACTERS', payload: data })
+        dispatch({ type: 'SET_LOADING', payload: false })
+      } catch(e) {
+        dispatch({ type: 'SET_CHARACTERS', payload: null})
+        dispatch({ type: 'SET_LOADING', payload: false })
+      }
+    }, 300),
+    []
+  )
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await getCharacters(debouncedFilterParams)
-        dispatch({ type: 'SET_CHARACTERS', payload: data })
-      } catch(e) {
-        dispatch({ type: 'RESET_CHARACTERS'})
-      }
-    }
-
-    loadData()
-  }, [dispatch, debouncedFilterParams])
+    dispatch({ type: 'SET_LOADING', payload: true })
+    loadData(state.filter)
+  }, [dispatch, loadData, state.filter])
 
   const next = async () => {
     try {
-      const data = await getCharacters(state.filter, state.characters.info.next)
+      const data = await getCharacters(state.filter, state?.characters?.info?.next)
       dispatch({ type: 'PATCH_CHARACTERS', payload: data})
+      dispatch({ type: 'SET_LOADING', payload: false })
     } catch (e) {
       //do something
     }
   }
 
+  if (state.characters === null || state.characters.info.count === 0) {
+    return (
+      <div className={styles.container}>
+        {state.loading && <Loader />}
+        <Empty />
+      </div>
+    )
+  }
+
   return (
     <div className={styles.container}>
       {state.loading && <Loader />}
-      {state.characters.info.count === 0 && <Empty />}
-      {state.characters.info.count !== 0 && (
-        <div className={styles.itemsContainer}>
-          {Object.values(state.characters.items).map((item) => {
-            return <GalleryItem key={item.id} id={item.id} /> 
-          })}
-          {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
-        </div>
-      )}
+      <div className={styles.itemsContainer}>
+        {state.characters.ids.map((id) => (<GalleryItem key={id} id={id} />))}
+        {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
+      </div>
     </div>
   )
 }

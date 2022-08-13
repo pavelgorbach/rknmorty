@@ -1,13 +1,8 @@
-import { useReducer, createContext, Dispatch, ReactNode } from 'react';
-import { State } from './types';
-import appReducer, { INITIAL_STATE, Actions} from './reducer';
+import { useReducer, createContext, Dispatch, ReactNode } from 'react'
 
-type IAppContext = {
-  state: State 
-  dispatch: Dispatch<Actions>
-} 
+import appReducer, { INITIAL_STATE, State, Actions } from './reducer'
 
-const AppContext = createContext<IAppContext>({
+const AppContext = createContext<{ state: State; dispatch: Dispatch<Actions>}>({
   state: INITIAL_STATE,
   dispatch: () => null
 })

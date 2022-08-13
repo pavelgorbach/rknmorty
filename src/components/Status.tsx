@@ -6,6 +6,7 @@ function StatusColor({ status }: { status: IStatus }) {
   if(status === 'dead') {
     color = 'red'
   }
+  
   return <div className={[styles.container, styles[color]].join(' ')}></div> 
 }
 

@@ -1,61 +1,39 @@
-import { State, FilterParams, Characters } from "./types"
+import { FilterParams, Characters } from "./types"
+
+export type State = {
+  filter: Partial<FilterParams> | null
+  characters: Characters | null 
+  loading: boolean
+}
 
 export type Actions =
-  | { type: 'SET_FILTER', payload: Partial<FilterParams> }
-  | { type: 'RESET_FILTER' }
-  | { type: 'SET_CHARACTERS', payload: Characters }
+  | { type: 'SET_FILTER', payload: State["filter"] | null }
+  | { type: 'SET_CHARACTERS', payload: Characters | null }
   | { type: 'PATCH_CHARACTERS', payload: Characters }
-  | { type: 'RESET_CHARACTERS' }
-
-export const INITIAL_FILTER: FilterParams = {
-  name: '',
-  status: '',
-  species: '',
-  type: '',
-  gender: ''
-}
- 
-export const INITIAL_CHARACTERS: Characters = {
-  info: {
-    count: 0,
-    pages: 0,
-    next: null,
-    prev: null 
-  },
-  items: {}
-}
+  | { type: 'SET_LOADING', payload: boolean }
 
 export const INITIAL_STATE: State = {
-  filter: INITIAL_FILTER,
-  characters: INITIAL_CHARACTERS,
-  loading: false,
-  filtered: false
+  filter: null, 
+  characters: null,
+  loading: false
 }
 
 const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
   switch(action.type) {
-    case 'RESET_FILTER':
+    case 'SET_LOADING':
       return {
         ...state,
-        filter: INITIAL_STATE.filter,
-        filtered: false,
-        loading: true
+        loading: action.payload
       }
     case 'SET_FILTER':
       return {
         ...state,
-        filter: {
-          ...state.filter,
-          ...action.payload,
-        },
-        loading: true,
-        filtered: true
+        filter: action.payload == null ? null : { ...state.filter, ...action.payload }
       }
     case 'SET_CHARACTERS':
       return {
         ...state,
-        characters: action.payload,
-        loading: false
+        characters: action.payload
       }
     case 'PATCH_CHARACTERS':
       return {
@@ -63,17 +41,14 @@ const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
         characters: {
           info: action.payload.info,
           items: {
-            ...state.characters.items,
+            ...state.characters?.items,
             ...action.payload.items
-          }
-        },
-        loading: false
-      }
-    case 'RESET_CHARACTERS':
-      return {
-        ...state,
-        characters: INITIAL_CHARACTERS,
-        loading: false
+          },
+          ids: [
+            ...(state.characters?.ids || []),
+            ...action.payload.ids
+          ]
+        }
       }
     default:
       return state 

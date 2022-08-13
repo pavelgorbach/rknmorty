@@ -11,7 +11,7 @@ type Props = {
 
 function GalleryItem({ id }: Props) {
   const { state } = useContext(AppContext)
-  const character = state.characters.items[id]
+  const character = state.characters?.items[id]
 
   const [isOpen, setOpen] = useState(false)
 
@@ -21,6 +21,10 @@ function GalleryItem({ id }: Props) {
 
   const closeItemCard = () => {
     setOpen(false)
+  }
+
+  if(!character) {
+    return null
   }
 
   return (
