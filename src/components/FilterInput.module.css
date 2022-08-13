@@ -1,0 +1,13 @@
+.container {
+  margin-bottom: 3px;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+}
+
+.label {
+  font-size: 14px;
+}
+
+.input {
+  border: none;
+}

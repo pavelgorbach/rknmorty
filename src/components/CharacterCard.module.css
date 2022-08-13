@@ -1,0 +1,20 @@
+.container {
+  background-color: rgb(60, 62, 68);
+}
+
+.image {
+  object-fit: contain;
+  width: 100%;
+  max-width: 100%;
+}
+
+.label {
+  color: rgba(255,255,255, .6);
+  margin-top: 5px;
+}
+
+.textContainer {
+  color: white;
+  padding: 0 20px 20px;
+  word-wrap: break-word;
+}

@@ -1,0 +1,21 @@
+.container {
+  background-color: rgb(60, 62, 68);
+  margin-bottom: 1px;
+  overflow: hidden;
+  height: 130px;
+}
+
+.container:last-child {
+  margin-bottom: 0;
+}
+
+.img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.title {
+  color: white;
+  font-size: 12px;
+  padding: 0 5px 5px;
+}
