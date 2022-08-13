@@ -13,6 +13,7 @@ import styles from './Gallery.module.css'
 function Gallery() {
   const { state, dispatch } = useContext(AppContext)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = useCallback(
     debounce(async (filterParams) => {
       try {
