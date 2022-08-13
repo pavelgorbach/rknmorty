@@ -17,7 +17,6 @@ function Gallery() {
     debounce(async (filterParams) => {
       try {
         const data = await getCharacters(filterParams)
-        console.log({ data })
         dispatch({ type: 'SET_CHARACTERS', payload: data })
         dispatch({ type: 'SET_LOADING', payload: false })
       } catch(e) {
