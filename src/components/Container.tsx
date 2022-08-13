@@ -5,7 +5,6 @@ type Props = {
 }
 
 function Container({ children }: Props) {
-  console.log('Container')
   return <div className={styles.container}>{children}</div>
 }
 

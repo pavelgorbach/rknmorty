@@ -1,6 +1,6 @@
 export type URL = string
 type Name = string
-type Status = 'alive' | 'dead' | 'unknown' | '' 
+export type Status = 'alive' | 'dead' | 'unknown' | '' 
 type Gender = 'female' | 'male' | 'genderless' | 'unknown' | ''
 type Origin = {
   name: Name 
@@ -41,5 +41,6 @@ export type Characters = {
 export type State = {
   filter: FilterParams
   characters: Characters 
-  loading: boolean
+  loading: boolean,
+  filtered: boolean
 }

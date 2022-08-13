@@ -4,3 +4,27 @@
   grid-template-columns: 1fr 50px;
   gap: 10px;
 }
+
+.buttons {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 2px;
+}
+
+.filterButtonContainer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px;
+}
+
+.green {
+  min-width: 5px;
+  min-height: 5px;
+  background-color: #79B100;
+}
+
+.gray {
+  min-width: 5px;
+  min-height: 5px;
+  background-color: gray;
+}

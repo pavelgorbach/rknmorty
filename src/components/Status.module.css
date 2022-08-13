@@ -1,0 +1,15 @@
+.container {
+  height: 3px;
+}
+
+.red {
+  background-color: #CC0300;
+}
+
+.gray {
+  background-color: gray;
+}
+
+.green {
+  background-color: #79B100;
+}

@@ -1,13 +1,18 @@
 .container {
   margin-bottom: 3px;
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 60px 1fr;
 }
 
 .label {
   font-size: 14px;
+  text-transform: capitalize;
 }
 
 .select {
   border: none;
+}
+
+.container:last-child {
+  margin-bottom: 0;
 }

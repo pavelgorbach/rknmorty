@@ -1,4 +1,4 @@
-import { Character, FilterParams, Info } from "../context/types"
+import { Character, FilterParams, Info, Status } from "../context/types"
 
 const baseURL = 'https://rickandmortyapi.com/api'
 
@@ -7,12 +7,13 @@ type Error = { error: string }
 
 const fromServer = (data: Characters) => {
   const items = data.results.reduce((acc, item) => {
-    acc[item.id] = item
+    acc[item.id] = { ...item, status: item.status.toLocaleLowerCase() as Status }
     return acc
   }, {} as {[id: string]: Character})
 
   return { info: data.info, items }
-} 
+}
+
 export const getCharacters = async (params: FilterParams, next?: string | null) => {
   const searchParams = new URLSearchParams(params).toString()
 

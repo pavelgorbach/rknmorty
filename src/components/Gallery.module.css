@@ -1,9 +1,14 @@
 .container {
-  overflow-y: auto;
   padding: 0 10px;
+  overflow-y: auto;
   margin: 5px 0 10px 0;
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.itemsContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: repeat(auto-fill, 130px);
+  grid-template-columns: 90px 90px 90px;
   gap: 1px;
 }

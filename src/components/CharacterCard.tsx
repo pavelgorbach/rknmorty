@@ -1,5 +1,6 @@
 import { Character } from "../context/types";
 import styles from './CharacterCard.module.css'
+import StatusColor from "./Status";
 
 function CharacterCard(props: Omit<Character, 'id'>) {
   const {image, name, status, species, type, gender, location, origin} = props
@@ -7,9 +8,10 @@ function CharacterCard(props: Omit<Character, 'id'>) {
   return (
     <div className={styles.container}>
       <img alt={name} src={image} className={styles.image} />
+      <StatusColor status={status} />
       <div className={styles.textContainer}>
         <h1>{name}</h1>
-        <div>{status} - {gender}</div>
+        <div>{status.toUpperCase()} - {gender}</div>
         <div>{species}</div>
         <div>{type}</div>
         <div className={styles.label}>Last known location:</div> 

@@ -28,7 +28,8 @@ export const INITIAL_CHARACTERS: Characters = {
 export const INITIAL_STATE: State = {
   filter: INITIAL_FILTER,
   characters: INITIAL_CHARACTERS,
-  loading: false
+  loading: false,
+  filtered: false
 }
 
 const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
@@ -37,6 +38,8 @@ const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
       return {
         ...state,
         filter: INITIAL_STATE.filter,
+        filtered: false,
+        loading: true
       }
     case 'SET_FILTER':
       return {
@@ -45,7 +48,8 @@ const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
           ...state.filter,
           ...action.payload,
         },
-        loading: true
+        loading: true,
+        filtered: true
       }
     case 'SET_CHARACTERS':
       return {

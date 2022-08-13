@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react"
 import { getCharacters } from "../api"
 import { AppContext } from "../context/AppProvider"
-import useDebouncedValue from "../hooks/useDebounce"
+import useDebouncedValue from "../hooks/useDebounceValue"
 import Empty from "./Empty"
 import Loader from "./Loader"
-import GalleryItem from "./GalleryItem"
 import Button from "./Button"
+import GalleryItem from "./GalleryItem"
 import styles from './Gallery.module.css'
 
 function Gallery() {
@@ -34,21 +34,18 @@ function Gallery() {
     }
   }
 
-  if(state.loading) {
-    return <Loader />
-  }
-
-  if(Object.keys(state.characters.items).length === 0) {
-    console.log('HOKM')
-    return <Empty />
-  }
-
   return (
     <div className={styles.container}>
-      {Object.values(state.characters.items).map((item) => {
-        return <GalleryItem key={item.id} id={item.id} /> 
-      })}
-      {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
+      {state.loading && <Loader />}
+      {state.characters.info.count === 0 && <Empty />}
+      {state.characters.info.count !== 0 && (
+        <div className={styles.itemsContainer}>
+          {Object.values(state.characters.items).map((item) => {
+            return <GalleryItem key={item.id} id={item.id} /> 
+          })}
+          {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
+        </div>
+      )}
     </div>
   )
 }
