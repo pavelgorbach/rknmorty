@@ -35,6 +35,7 @@ function Gallery() {
 
   const next = async () => {
     try {
+      dispatch({ type: 'SET_LOADING', payload: true })
       const data = await getCharacters(state.filter, state?.characters?.info?.next)
       dispatch({ type: 'PATCH_CHARACTERS', payload: data})
       dispatch({ type: 'SET_LOADING', payload: false })
