@@ -1,7 +1,7 @@
 import { useContext, useEffect, useCallback } from "react"
 
-import { getCharacters } from "../api"
 import { AppContext } from "../context/AppProvider"
+import { getCharacters } from "../api"
 import { debounce } from "../utils"
 import Empty from "./Empty"
 import Loader from "./Loader"
@@ -14,7 +14,7 @@ function Gallery() {
   const { state, dispatch } = useContext(AppContext)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const loadData = useCallback(
+  const getDebouncedCharacters = useCallback(
     debounce(async (filterParams) => {
       try {
         const data = await getCharacters(filterParams)
@@ -29,9 +29,9 @@ function Gallery() {
   )
 
   useEffect(() => {
-    dispatch({ type: 'SET_LOADING', payload: true })
-    loadData(state.filter)
-  }, [dispatch, loadData, state.filter])
+      dispatch({ type: 'SET_LOADING', payload: true })
+      getDebouncedCharacters(state.filter)
+  }, [dispatch, getDebouncedCharacters, state.filter])
 
   const next = async () => {
     try {
@@ -44,7 +44,7 @@ function Gallery() {
     }
   }
 
-  if (state.characters === null || state.characters.info.count === 0) {
+  if (state.characters === null || state.characters === undefined || state.characters.info.count === 0) {
     return (
       <div className={styles.container}>
         {state.loading && <Loader />}
@@ -57,7 +57,7 @@ function Gallery() {
     <div className={styles.container}>
       {state.loading && <Loader />}
       <div className={styles.itemsContainer}>
-        {state.characters.ids.map((id) => (<GalleryItem key={id} id={id} />))}
+        {state.characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
         {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
       </div>
     </div>

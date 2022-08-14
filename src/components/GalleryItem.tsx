@@ -1,9 +1,11 @@
 import { useContext, useState } from 'react'
+
 import { AppContext } from '../context/AppProvider'
-import Modal from "./Modal"
 import CharacterCard from "./CharacterCard"
+import StatusColorLine from './StatusColorLine'
+import Modal from "./Modal"
+
 import styles from './GalleryItem.module.css'
-import Status from './Status'
 
 type Props = {
   id: string
@@ -31,7 +33,7 @@ function GalleryItem({ id }: Props) {
     <>
       <article className={styles.container} onClick={openItemCard}>
         <img alt={character.name} className={styles.img} src={character.image} />
-        <Status status={character.status}/>
+        <StatusColorLine status={character.status}/>
         <div className={styles.title}>{character.name}</div>
       </article>
 

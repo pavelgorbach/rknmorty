@@ -1,4 +1,5 @@
-import { Character, Characters, FilterParams, Info, Status } from "../context/types"
+import { Character, Info, Status } from "./context/types"
+import { FilterParams, Characters } from "./context/reducer"
 
 const baseURL = 'https://rickandmortyapi.com/api'
 
@@ -16,7 +17,7 @@ const fromServer = (data: Response) => {
 
 export const getCharacters = async (params: Partial<FilterParams> | null, next?: string | null): Promise<Characters> => {
   const searchParams = new URLSearchParams(params || {}).toString() 
-  const url = next ? `${next}&${searchParams}` : `${baseURL}/character?${searchParams}`
+  const url = next ? next : `${baseURL}/character?${searchParams}`
 
   const resp = await fetch(url)
 

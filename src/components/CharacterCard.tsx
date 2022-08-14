@@ -1,6 +1,6 @@
 import { Character } from "../context/types";
 import styles from './CharacterCard.module.css'
-import StatusColor from "./Status";
+import StatusColor from "./StatusColorLine";
 
 function CharacterCard(props: Omit<Character, 'id'>) {
   const {image, name, status, species, type, gender, location, origin} = props

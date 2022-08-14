@@ -1,9 +1,19 @@
-import { FilterParams, Characters } from "./types"
+import { Character, Info } from "./types"
 
-export type State = {
+export type State = Readonly<{
   filter: Partial<FilterParams> | null
   characters: Characters | null 
   loading: boolean
+}>
+
+export type FilterParams = Pick<Character, 'name' | 'status' | 'species' | 'type' | 'gender'>
+
+export type Characters = {
+  info: Info
+  items: {
+    [id: string]: Character
+  },
+  ids: string[]
 }
 
 export type Actions =

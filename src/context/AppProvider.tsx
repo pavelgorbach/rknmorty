@@ -17,5 +17,4 @@ function AppProvider(props: { children: ReactNode }) {
   );
 }
 
-
 export { AppProvider, AppContext }

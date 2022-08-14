@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext } from "react"
 
 import { AppContext } from "../context/AppProvider"
-import { FilterParams } from "../context/types"
+import { FilterParams } from "../context/reducer"
 
 import styles from  './FilterSelect.module.css'
 
