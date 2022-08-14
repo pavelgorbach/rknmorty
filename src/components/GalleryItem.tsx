@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 
 import { AppContext } from '../context/AppProvider'
 import StatusColorLine from './StatusColorLine'
@@ -11,7 +11,15 @@ type Props = {
 
 export default function GalleryItem(p: Props) {
   const { state, dispatch } = useContext(AppContext)
+  const itemRef = useRef<HTMLElement>(null)
   const character = state.characters?.items[p.id]
+  const isActive = state.selectedCharacter === p.id 
+
+  useEffect(() => {
+    if(isActive) {
+      itemRef.current?.scrollIntoView()
+    } 
+  }, [isActive])
 
   if(!character) {
     return null
@@ -21,9 +29,8 @@ export default function GalleryItem(p: Props) {
     dispatch({ type: 'SELECT_CHARACTER', payload: p.id })
   }
 
-  const isActive = state.selectedCharacter === p.id 
   return (
-    <article className={[styles.container, isActive && styles.active ].join(' ')} onClick={onClick}>
+    <article ref={itemRef} className={[styles.container, isActive && styles.active ].join(' ')} onClick={onClick}>
       <img alt={character.name} className={styles.img} src={character.image} />
       <StatusColorLine status={character.status}/>
       <div className={styles.title}>{character.name}</div>
