@@ -7,7 +7,7 @@ import styles from './FilterInput.module.css'
 
 type Name = Omit<FilterParams, 'status' | 'gender'>
 
-function FilterInput(p: {name: keyof Name}) {
+export default function FilterInput(p: {name: keyof Name}) {
   const { state, dispatch } = useContext(AppContext)
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -21,5 +21,3 @@ function FilterInput(p: {name: keyof Name}) {
     </div>
   )
 }
-
-export default FilterInput

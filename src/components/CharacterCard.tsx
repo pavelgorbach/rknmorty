@@ -2,7 +2,7 @@ import { Character } from "../context/types";
 import styles from './CharacterCard.module.css'
 import StatusColor from "./StatusColorLine";
 
-function CharacterCard(props: Omit<Character, 'id'>) {
+export default function CharacterCard(props: Omit<Character, 'id'>) {
   const {image, name, status, species, type, gender, location, origin} = props
 
   return (
@@ -22,5 +22,3 @@ function CharacterCard(props: Omit<Character, 'id'>) {
     </div>
   )
 }
-
-export default CharacterCard

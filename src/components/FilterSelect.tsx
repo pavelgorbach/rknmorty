@@ -8,7 +8,7 @@ import styles from  './FilterSelect.module.css'
 type Name = Pick<FilterParams, 'status' | 'gender'>
 interface Props<N, O> { name: N; options: O[]} 
 
-function FilterSelect<N extends keyof Name, O extends FilterParams[N]>({ name, options }: Props<N, O>) {
+export default function FilterSelect<N extends keyof Name, O extends FilterParams[N]>({ name, options }: Props<N, O>) {
   const { state, dispatch } = useContext(AppContext)
 
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -27,5 +27,3 @@ function FilterSelect<N extends keyof Name, O extends FilterParams[N]>({ name, o
     </div>
   )
 }
-
-export default FilterSelect

@@ -28,7 +28,7 @@ export const INITIAL_STATE: State = {
   loading: false
 }
 
-const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
+export default function appReducer(state: State = INITIAL_STATE, action: Actions): State {
   switch(action.type) {
     case 'SET_LOADING':
       return {
@@ -64,5 +64,3 @@ const appReducer = (state: State = INITIAL_STATE, action: Actions): State => {
       return state 
   }
 }
-
-export default appReducer

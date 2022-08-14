@@ -7,7 +7,7 @@ import Button from "./Button"
 
 import styles from './Filter.module.css'
 
-function Filter() {
+export default function Filter() {
   const { state, dispatch } = useContext(AppContext)
   const [isOpened, setOpen] = useState(false)
     
@@ -48,5 +48,3 @@ function Filter() {
     </div>
   )
 }
-
-export default Filter

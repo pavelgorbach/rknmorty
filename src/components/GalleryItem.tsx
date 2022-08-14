@@ -11,7 +11,7 @@ type Props = {
   id: string
 }
 
-function GalleryItem({ id }: Props) {
+export default function GalleryItem({ id }: Props) {
   const { state } = useContext(AppContext)
   const character = state.characters?.items[id]
 
@@ -43,5 +43,3 @@ function GalleryItem({ id }: Props) {
     </>
   )
 }
-
-export default GalleryItem

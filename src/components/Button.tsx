@@ -6,8 +6,6 @@ type Props = {
   onClick(): void
 }
 
-function Button({ children, disabled, onClick }: Props) {
+export default function Button({ children, disabled, onClick }: Props) {
   return <button className={styles.container} disabled={disabled} onClick={onClick}>{children}</button>
 }
-
-export default Button

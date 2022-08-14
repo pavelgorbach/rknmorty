@@ -10,7 +10,7 @@ import GalleryItem from "./GalleryItem"
 
 import styles from './Gallery.module.css'
 
-function Gallery() {
+export default function Gallery() {
   const { state, dispatch } = useContext(AppContext)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,5 +63,3 @@ function Gallery() {
     </div>
   )
 }
-
-export default Gallery 

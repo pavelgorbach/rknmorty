@@ -6,7 +6,7 @@ const baseURL = 'https://rickandmortyapi.com/api'
 type Response = { info: Info, results: Character[]}
 type Error = { error: string }
 
-const fromServer = (data: Response) => {
+function fromServer(data: Response) {
   const items = data.results.reduce((acc, item) => {
     acc[item.id] = { ...item, status: item.status.toLowerCase() as Status }
     return acc
@@ -15,7 +15,7 @@ const fromServer = (data: Response) => {
   return { info: data.info, items, ids: Object.keys(items) }
 }
 
-export const getCharacters = async (params: Partial<FilterParams> | null, next?: string | null): Promise<Characters> => {
+export async function getCharacters(params: Partial<FilterParams> | null, next?: string | null): Promise<Characters> {
   const searchParams = new URLSearchParams(params || {}).toString() 
   const url = next ? next : `${baseURL}/character?${searchParams}`
 
