@@ -69,7 +69,7 @@ export default function Gallery() {
       <div className={styles.container}>
         {state.loading && <Loader />}
         <div className={styles.itemsContainer} onScroll={onScroll}>
-          {state.characters.ids.map((id, idx) => <GalleryItem key={id} id={id} />)}
+          {state.characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
         </div>
       </div>
       

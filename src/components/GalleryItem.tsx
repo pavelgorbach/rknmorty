@@ -21,8 +21,9 @@ export default function GalleryItem(p: Props) {
     dispatch({ type: 'SELECT_CHARACTER', payload: p.id })
   }
 
+  const isActive = state.selectedCharacter === p.id 
   return (
-    <article className={styles.container} onClick={onClick}>
+    <article className={[styles.container, isActive && styles.active ].join(' ')} onClick={onClick}>
       <img alt={character.name} className={styles.img} src={character.image} />
       <StatusColorLine status={character.status}/>
       <div className={styles.title}>{character.name}</div>

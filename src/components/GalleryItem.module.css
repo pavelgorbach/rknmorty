@@ -13,6 +13,10 @@
   margin-bottom: 0;
 }
 
+.active {
+  filter: blur(5px);
+}
+
 .img {
   display: block;
   width: 90px;
