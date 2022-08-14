@@ -7,7 +7,7 @@ type Error = { error: string }
 
 const fromServer = (data: Response) => {
   const items = data.results.reduce((acc, item) => {
-    acc[item.id] = { ...item, status: item.status.toLocaleLowerCase() as Status }
+    acc[item.id] = { ...item, status: item.status.toLowerCase() as Status }
     return acc
   }, {} as {[id: string]: Character })
 
