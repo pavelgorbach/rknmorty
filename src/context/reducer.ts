@@ -56,7 +56,7 @@ export default function appReducer(state: State = INITIAL_STATE, action: Actions
           },
           ids: [
             ...(state.characters?.ids || []),
-            ...action.payload.ids
+            ...action.payload.ids.filter(id => !state.characters?.items?.[id])
           ]
         }
       }

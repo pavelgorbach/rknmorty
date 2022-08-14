@@ -33,9 +33,13 @@ export default function Gallery() {
   }, [dispatch, getDebouncedCharacters, state.filter])
 
   const next = async () => {
+    if(!state.characters?.info.next) {
+      return
+    }
+
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
-      const data = await getCharacters(state.filter, state?.characters?.info?.next)
+      const data = await getCharacters(state.filter, state.characters.info.next)
       dispatch({ type: 'PATCH_CHARACTERS', payload: data})
       dispatch({ type: 'SET_LOADING', payload: false })
     } catch (e) {
@@ -44,7 +48,7 @@ export default function Gallery() {
   }
 
   const onScroll = (e: UIEvent<HTMLDivElement>) => {
-    if(e.currentTarget.scrollTop + e.currentTarget.clientHeight >= e.currentTarget.scrollHeight) {
+    if(e.currentTarget.scrollHeight <= e.currentTarget.scrollTop + e.currentTarget.clientHeight) {
       next()
     }
   }
