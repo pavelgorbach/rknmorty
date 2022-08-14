@@ -5,6 +5,7 @@ import { getCharacters } from "../api"
 import { debounce } from "../utils"
 import Empty from "./Empty"
 import Loader from "./Loader"
+import CharacterCard from "./CharacterCard"
 import GalleryItem from "./GalleryItem"
 
 import styles from './Gallery.module.css'
@@ -43,7 +44,8 @@ export default function Gallery() {
       dispatch({ type: 'PATCH_CHARACTERS', payload: data})
       dispatch({ type: 'SET_LOADING', payload: false })
     } catch (e) {
-      //do something
+      console.error(e)
+      dispatch({ type: 'SET_LOADING', payload: false })
     }
   }
 
@@ -63,11 +65,15 @@ export default function Gallery() {
   }
 
   return (
-    <div className={styles.container}>
-      {state.loading && <Loader />}
-      <div className={styles.itemsContainer} onScroll={onScroll}>
-        {state.characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
+    <>
+      <div className={styles.container}>
+        {state.loading && <Loader />}
+        <div className={styles.itemsContainer} onScroll={onScroll}>
+          {state.characters.ids.map((id, idx) => <GalleryItem key={id} id={id} />)}
+        </div>
       </div>
-    </div>
+      
+      <CharacterCard />
+    </>
   )
 }

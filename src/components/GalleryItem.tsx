@@ -1,9 +1,7 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 
 import { AppContext } from '../context/AppProvider'
-import CharacterCard from "./CharacterCard"
 import StatusColorLine from './StatusColorLine'
-import Modal from "./Modal"
 
 import styles from './GalleryItem.module.css'
 
@@ -11,35 +9,23 @@ type Props = {
   id: string
 }
 
-export default function GalleryItem({ id }: Props) {
-  const { state } = useContext(AppContext)
-  const character = state.characters?.items[id]
-
-  const [isOpen, setOpen] = useState(false)
-
-  const openItemCard = () => {
-    setOpen(true) 
-  }
-
-  const closeItemCard = () => {
-    setOpen(false)
-  }
+export default function GalleryItem(p: Props) {
+  const { state, dispatch } = useContext(AppContext)
+  const character = state.characters?.items[p.id]
 
   if(!character) {
     return null
   }
 
-  return (
-    <>
-      <article className={styles.container} onClick={openItemCard}>
-        <img alt={character.name} className={styles.img} src={character.image} />
-        <StatusColorLine status={character.status}/>
-        <div className={styles.title}>{character.name}</div>
-      </article>
+  const onClick = () => {
+    dispatch({ type: 'SELECT_CHARACTER', payload: p.id })
+  }
 
-      <Modal isOpen={isOpen} onClose={closeItemCard}>
-        <CharacterCard {...character} />
-      </Modal>
-    </>
+  return (
+    <article className={styles.container} onClick={onClick}>
+      <img alt={character.name} className={styles.img} src={character.image} />
+      <StatusColorLine status={character.status}/>
+      <div className={styles.title}>{character.name}</div>
+    </article>
   )
 }

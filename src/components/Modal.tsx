@@ -23,8 +23,7 @@ export default function Modal(p: Props) {
       <div className={styles.container} onClick={stopPropagation}>
         {p.children}
       </div>
-    </div>
-    ,
+    </div>,
     document.querySelector('body') as HTMLBodyElement
   )
 }

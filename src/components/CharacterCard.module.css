@@ -1,5 +1,6 @@
 .container {
   background-color: rgb(60, 62, 68);
+  cursor: pointer;
 }
 
 .image {

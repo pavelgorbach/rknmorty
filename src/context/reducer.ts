@@ -4,6 +4,7 @@ export type State = Readonly<{
   filter: Partial<FilterParams> | null
   characters: Characters | null 
   loading: boolean
+  selectedCharacter: string | null
 }>
 
 export type FilterParams = Pick<Character, 'name' | 'status' | 'species' | 'type' | 'gender'>
@@ -21,11 +22,13 @@ export type Actions =
   | { type: 'SET_CHARACTERS', payload: Characters | null }
   | { type: 'PATCH_CHARACTERS', payload: Characters }
   | { type: 'SET_LOADING', payload: boolean }
+  | { type: 'SELECT_CHARACTER', payload: string | null }
 
 export const INITIAL_STATE: State = {
   filter: null, 
   characters: null,
-  loading: false
+  loading: false,
+  selectedCharacter: null
 }
 
 export default function appReducer(state: State = INITIAL_STATE, action: Actions): State {
@@ -59,6 +62,11 @@ export default function appReducer(state: State = INITIAL_STATE, action: Actions
             ...action.payload.ids.filter(id => !state.characters?.items?.[id])
           ]
         }
+      }
+    case 'SELECT_CHARACTER':
+      return {
+        ...state,
+        selectedCharacter: action.payload,
       }
     default:
       return state 
