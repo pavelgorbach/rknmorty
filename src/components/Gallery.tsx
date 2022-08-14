@@ -1,11 +1,10 @@
-import { useContext, useEffect, useCallback } from "react"
+import { useContext, useEffect, useCallback, UIEvent } from "react"
 
 import { AppContext } from "../context/AppProvider"
 import { getCharacters } from "../api"
 import { debounce } from "../utils"
 import Empty from "./Empty"
 import Loader from "./Loader"
-import Button from "./Button"
 import GalleryItem from "./GalleryItem"
 
 import styles from './Gallery.module.css'
@@ -44,6 +43,12 @@ export default function Gallery() {
     }
   }
 
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    if(e.currentTarget.scrollTop + e.currentTarget.clientHeight >= e.currentTarget.scrollHeight) {
+      next()
+    }
+  }
+
   if (state.characters === null || state.characters.info.count === 0) {
     return (
       <div className={styles.container}>
@@ -56,9 +61,8 @@ export default function Gallery() {
   return (
     <div className={styles.container}>
       {state.loading && <Loader />}
-      <div className={styles.itemsContainer}>
+      <div className={styles.itemsContainer} onScroll={onScroll}>
         {state.characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
-        {state.characters.info.next !== null && <Button onClick={next}>More</Button>}
       </div>
     </div>
   )
