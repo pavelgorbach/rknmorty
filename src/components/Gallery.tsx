@@ -44,7 +44,7 @@ function Gallery() {
     }
   }
 
-  if (state.characters === null || state.characters === undefined || state.characters.info.count === 0) {
+  if (state.characters === null || state.characters.info.count === 0) {
     return (
       <div className={styles.container}>
         {state.loading && <Loader />}
