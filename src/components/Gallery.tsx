@@ -1,7 +1,6 @@
 import { useEffect, useCallback, UIEvent, memo } from "react"
 
-import { debounce } from "../utils"
-import { getCharactersAsync, setLoading } from "../context/reducer"
+import { getCharactersAsync } from "../context/reducer"
 import { useApp } from "../context/context"
 
 import Empty from "./Empty"
@@ -13,17 +12,9 @@ import styles from './Gallery.module.css'
 export default memo(function Gallery() {
   const { state: { loading, characters, filterParams }, dispatch } = useApp()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getDebouncedCharacters = useCallback(
-    debounce(({ dispatch, filterParams }) => {
-      getCharactersAsync({ dispatch, filterParams })
-    }
-  ), [])
-
   useEffect(() => {
-    dispatch(setLoading(true))
-    getDebouncedCharacters({ dispatch, filterParams })
-  }, [dispatch, filterParams, getDebouncedCharacters])
+    getCharactersAsync({ dispatch, filterParams })
+  }, [dispatch, filterParams ])
   
   const next = useCallback(async () => {
     if(!characters?.info.next) return

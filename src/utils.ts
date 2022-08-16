@@ -1,4 +1,4 @@
-export const debounce = <T extends (...args: any) => void>(func: T, wait: number = 600): T => {
+export const debounce = <T extends (...args: any) => void>(func: T, wait: number = 500): T => {
   let timer: NodeJS.Timeout
 
   const debouncedFn = (...args: any) => {

@@ -1,5 +1,6 @@
 import { useState, useCallback, memo } from 'react'
 
+import { shallowObjEqual, debounce } from '../utils'
 import { FilterParams } from '../types'
 import { useApp } from '../context/context'
 import { INITIAL_FILTER_PARAMS, setFilter } from '../context/reducer'
@@ -9,19 +10,23 @@ import FilterInput from "./FilterInput"
 import FilterSelect from "./FilterSelect"
 
 import styles from './Filter.module.css'
-import { shallowObjEqual } from '../utils'
 
 const statusOptions = ['', 'alive', 'dead', 'unknown'] as FilterParams["status"][]
 const genderOptions = ['', 'male', 'female', 'genderless', 'unknown'] as FilterParams["gender"][]
 
-const Check = memo(() => <div>Check</div>)
-
 export default memo(function Filter() {
   const { state: { filterParams }, dispatch } = useApp() 
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChangeDebounced = useCallback(
+    debounce((filterParams) => {
+      dispatch(setFilter(filterParams))
+    }
+  ), [])
+
   const onChange = useCallback((params: Partial<FilterParams>) => {
-    dispatch(setFilter(params))
-  }, [dispatch])
+    onChangeDebounced(params)
+  }, [onChangeDebounced])
 
   const onReset = useCallback(() => {
     dispatch(setFilter(INITIAL_FILTER_PARAMS))
@@ -37,7 +42,6 @@ export default memo(function Filter() {
   return (
     <div className={styles.container}>
       <div className={styles.inputsContainer}>
-        <Check />
         <FilterInput<FilterParams['name']>
           label="name"
           initialValue={INITIAL_FILTER_PARAMS.name}
