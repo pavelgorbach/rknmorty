@@ -17,7 +17,7 @@ function AppProvider(props: { children: ReactNode }) {
   )
 }
 
-function useApp() {
+function useAppContext() {
   const context = useContext(AppContext)
 
   if(context === undefined) {
@@ -27,4 +27,4 @@ function useApp() {
   return context 
 }
 
-export { AppProvider, useApp }
+export { AppProvider, useAppContext }

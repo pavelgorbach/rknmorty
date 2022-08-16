@@ -1,7 +1,7 @@
 import { useEffect, useCallback, UIEvent, memo } from "react"
 
 import { getCharactersAsync, selectCharacter } from "../context/reducer"
-import { useApp } from "../context/context"
+import { useAppContext } from "../context/context"
 
 import Empty from "./Empty"
 import Loader from "./Loader"
@@ -10,7 +10,7 @@ import GalleryItem from "./GalleryItem"
 import styles from './Gallery.module.css'
 
 export default memo(function Gallery() {
-  const { state: { loading, characters, filterParams, selectedCharacter }, dispatch } = useApp()
+  const { state: { loading, characters, filterParams, selectedCharacter }, dispatch } = useAppContext()
 
   useEffect(() => {
     getCharactersAsync({ dispatch, filterParams })

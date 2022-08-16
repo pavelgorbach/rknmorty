@@ -1,4 +1,4 @@
-import { useApp } from "../context/context"
+import { useAppContext } from "../context/context"
 import { selectCharacter } from "../context/reducer"
 
 import Modal from "./Modal"
@@ -7,7 +7,7 @@ import StatusColor from "./StatusColorLine"
 import styles from './CharacterCard.module.css'
 
 export default function CharacterCard() {
-  const { state, dispatch } = useApp() 
+  const { state, dispatch } = useAppContext() 
 
   if(!state.selectedCharacter || !state.characters) {
     return null

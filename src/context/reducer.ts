@@ -7,7 +7,7 @@ export type State = Readonly<{
   filterParams?: FilterParams
   characters?: Characters
   loading: boolean
-  selectedCharacter?: string
+  selectedCharacter?: string 
 }>
 
 export const INITIAL_STATE: State = {

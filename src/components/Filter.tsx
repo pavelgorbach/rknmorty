@@ -2,7 +2,7 @@ import { useState, useCallback, memo } from 'react'
 
 import { shallowObjEqual, debounce } from '../utils'
 import { FilterParams } from '../types'
-import { useApp } from '../context/context'
+import { useAppContext } from '../context/context'
 import { INITIAL_FILTER_PARAMS, patchFilter} from '../context/reducer'
 
 import Button from "./Button"
@@ -15,7 +15,7 @@ const statusOptions = ['', 'alive', 'dead', 'unknown'] as FilterParams["status"]
 const genderOptions = ['', 'male', 'female', 'genderless', 'unknown'] as FilterParams["gender"][]
 
 export default memo(function Filter() {
-  const { state: { filterParams }, dispatch } = useApp() 
+  const { state: { filterParams }, dispatch } = useAppContext() 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeDebounced = useCallback(
