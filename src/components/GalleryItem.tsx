@@ -1,16 +1,13 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { AppContext } from '../context/AppProvider'
+import { useApp } from '../context/context'
+
 import StatusColorLine from './StatusColorLine'
 
 import styles from './GalleryItem.module.css'
 
-type Props = {
-  id: string
-}
-
-export default function GalleryItem(p: Props) {
-  const { state, dispatch } = useContext(AppContext)
+export default function GalleryItem(p: {id: string}) {
+  const { state, dispatch } = useApp() 
   const itemRef = useRef<HTMLElement>(null)
   const character = state.characters?.items[p.id]
   const isActive = state.selectedCharacter === p.id 

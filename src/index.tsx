@@ -15,8 +15,8 @@ if (!body) {
   body.appendChild(widget)
 
   ReactDOM.createRoot(widget).render(
-    <React.StrictMode>
+    // <React.StrictMode>
       <App />
-    </React.StrictMode>
+    // </React.StrictMode>
   );
 }

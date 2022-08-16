@@ -1,13 +1,13 @@
-import { useContext } from "react";
+import { useApp } from "../context/context"
+import { selectCharacter } from "../context/reducer"
 
-import { AppContext } from "../context/AppProvider";
-import StatusColor from "./StatusColorLine";
 import Modal from "./Modal"
+import StatusColor from "./StatusColorLine"
 
 import styles from './CharacterCard.module.css'
 
 export default function CharacterCard() {
-  const { state, dispatch } = useContext(AppContext)
+  const { state, dispatch } = useApp() 
 
   if(!state.selectedCharacter || !state.characters) {
     return null
@@ -16,7 +16,7 @@ export default function CharacterCard() {
   const c = state.characters.items[state.selectedCharacter]
 
   const closeModal = () => {
-    dispatch({ type: 'SELECT_CHARACTER', payload: null })
+    dispatch(selectCharacter())
   }
 
   const onSelectNextCharacter = () => {
@@ -25,7 +25,7 @@ export default function CharacterCard() {
     }
 
     const currentIdx = state.characters.ids.indexOf(state.selectedCharacter)
-    dispatch({ type: 'SELECT_CHARACTER', payload: state.characters.ids[currentIdx + 1]})
+    dispatch(selectCharacter(state.characters.ids[currentIdx + 1]))
   }
 
   return (

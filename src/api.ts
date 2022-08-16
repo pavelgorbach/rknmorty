@@ -1,12 +1,8 @@
-import { Character, Info, Status } from "./context/types"
-import { FilterParams, Characters } from "./context/reducer"
+import { FilterParams, Characters, Character, Info, Status, CharacterResponse, CharacterResponseError } from "./types"
 
 const baseURL = 'https://rickandmortyapi.com/api'
 
-type Response = { info: Info, results: Character[]}
-type Error = { error: string }
-
-function fromServer(data: Response) {
+function transformResponse(data: CharacterResponse) {
   const items = data.results.reduce((acc, item) => {
     acc[item.id] = { ...item, status: item.status.toLowerCase() as Status }
     return acc
@@ -15,18 +11,21 @@ function fromServer(data: Response) {
   return { info: data.info, items, ids: Object.keys(items) }
 }
 
-export async function getCharacters(params: Partial<FilterParams> | null, next?: string | null): Promise<Characters> {
-  const searchParams = new URLSearchParams(params || {}).toString() 
-  const url = next ? next : `${baseURL}/character?${searchParams}`
+type Request = {
+  params?: Partial<FilterParams>,
+  next?: Info['next']
+}
+
+export async function getCharacters(p: Request ): Promise<Characters> {
+  const searchParams = new URLSearchParams(p.params || {}).toString() 
+  const url = p.next ? p.next : `${baseURL}/character?${searchParams}`
 
   const resp = await fetch(url)
+  const result = await resp.json()
 
   if(resp.status === 404 || resp.ok === false) {
-    const result = await resp.json() as Error 
-    Promise.reject(result.error)
+    return Promise.reject(result as CharacterResponseError)
   }
 
-  const data = await resp.json() as Response 
-
-  return Promise.resolve(fromServer(data))
+  return transformResponse(result as CharacterResponse)
 }

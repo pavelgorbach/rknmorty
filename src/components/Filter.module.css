@@ -1,25 +1,23 @@
 .container {
   padding: 10px 10px 0;
   display: grid;
-  grid-template-columns: 1fr 50px;
+  grid-template-columns: 1fr 60px;
   gap: 10px;
 }
 
-.buttons {
+.buttonsContainer {
   display: grid;
   grid-template-rows: auto auto 1fr;
-  row-gap: 2px;
+  row-gap: 1px;
 }
 
-.filterButtonContainer {
+.inputsContainer {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px;
+  row-gap: 1px;
 }
 
 .green {
-  min-width: 5px;
-  min-height: 5px;
+  height: 3px;
   background-color: #79B100;
 }
 

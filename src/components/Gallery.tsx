@@ -1,79 +1,56 @@
-import { useContext, useEffect, useCallback, UIEvent } from "react"
+import { useEffect, useCallback, UIEvent, memo } from "react"
 
-import { AppContext } from "../context/AppProvider"
-import { getCharacters } from "../api"
 import { debounce } from "../utils"
+import { getCharactersAsync, setLoading } from "../context/reducer"
+import { useApp } from "../context/context"
+
 import Empty from "./Empty"
 import Loader from "./Loader"
-import CharacterCard from "./CharacterCard"
 import GalleryItem from "./GalleryItem"
 
 import styles from './Gallery.module.css'
 
-export default function Gallery() {
-  const { state, dispatch } = useContext(AppContext)
+export default memo(function Gallery() {
+  const { state: { loading, characters, filterParams }, dispatch } = useApp()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDebouncedCharacters = useCallback(
-    debounce(async (filterParams) => {
-      try {
-        const data = await getCharacters(filterParams)
-        dispatch({ type: 'SET_CHARACTERS', payload: data })
-        dispatch({ type: 'SET_LOADING', payload: false })
-      } catch(e) {
-        dispatch({ type: 'SET_CHARACTERS', payload: null})
-        dispatch({ type: 'SET_LOADING', payload: false })
-      }
-    }, 300),
-    []
-  )
+    debounce(({ dispatch, filterParams }) => {
+      getCharactersAsync({ dispatch, filterParams })
+    }
+  ), [])
 
   useEffect(() => {
-      dispatch({ type: 'SET_LOADING', payload: true })
-      getDebouncedCharacters(state.filter)
-  }, [dispatch, getDebouncedCharacters, state.filter])
+    dispatch(setLoading(true))
+    getDebouncedCharacters({ dispatch, filterParams })
+  }, [dispatch, filterParams, getDebouncedCharacters])
+  
+  const next = useCallback(async () => {
+    if(!characters?.info.next) return
+    getCharactersAsync({ dispatch, filterParams, characters, next: characters.info.next })
+  }, [characters, dispatch, filterParams])
 
-  const next = async () => {
-    if(!state.characters?.info.next) {
-      return
-    }
-
-    try {
-      dispatch({ type: 'SET_LOADING', payload: true })
-      const data = await getCharacters(state.filter, state.characters.info.next)
-      dispatch({ type: 'PATCH_CHARACTERS', payload: data})
-      dispatch({ type: 'SET_LOADING', payload: false })
-    } catch (e) {
-      console.error(e)
-      dispatch({ type: 'SET_LOADING', payload: false })
-    }
-  }
-
-  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+  const onScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
     if(e.currentTarget.scrollHeight <= e.currentTarget.scrollTop + e.currentTarget.clientHeight) {
       next()
     }
-  }
+  }, [next])
 
-  if (state.characters === null || state.characters.info.count === 0) {
+  if (!characters || characters.info.count === 0) {
     return (
       <div className={styles.container}>
-        {state.loading && <Loader />}
+        {loading && <Loader />}
         <Empty />
       </div>
     )
   }
 
   return (
-    <>
-      <div className={styles.container}>
-        {state.loading && <Loader />}
-        <div className={styles.itemsContainer} onScroll={onScroll}>
-          {state.characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
-        </div>
+    <div className={styles.container}>
+      {loading && <Loader />}
+      <div className={styles.itemsContainer} onScroll={onScroll}>
+        {characters.ids.map((id) => <GalleryItem key={id} id={id} />)}
       </div>
-      
-      <CharacterCard />
-    </>
+    </div>
   )
-}
+})

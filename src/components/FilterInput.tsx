@@ -1,23 +1,23 @@
-import { ChangeEvent, useContext } from "react"
-
-import { AppContext } from "../context/AppProvider"
-import { FilterParams } from "../context/reducer"
+import { ChangeEvent, memo, useCallback } from "react"
 
 import styles from './FilterInput.module.css'
+interface Props<P> {
+  label: P 
+  initialValue: P 
+  onChange: (value: { [name: string]: string }) => void
+}
 
-type Name = Omit<FilterParams, 'status' | 'gender'>
-
-export default function FilterInput(p: {name: keyof Name}) {
-  const { state, dispatch } = useContext(AppContext)
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'SET_FILTER', payload: {[p.name]: e.target.value} })
-  }
+function FilterInput<T extends string>(p: Props<T>) {
+  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    p.onChange({[p.label]: e.target.value})
+  }, [p])
 
   return (
     <div className={styles.container}>
-      <label className={styles.label}>{p.name}</label>
-      <input className={styles.input} value={state?.filter?.[p.name] || ''} onChange={onChange} />
+      <label className={styles.label} htmlFor={p.label}>{p.label}</label>
+      <input className={styles.input} id={p.label} defaultValue={p.initialValue} type="text" onChange={onChange} />
     </div>
   )
 }
+
+export default memo(FilterInput) as typeof FilterInput

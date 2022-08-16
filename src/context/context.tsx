@@ -1,4 +1,4 @@
-import { useReducer, createContext, Dispatch, ReactNode } from 'react'
+import { useReducer, createContext, Dispatch, ReactNode, useContext } from 'react'
 
 import appReducer, { INITIAL_STATE, State, Actions } from './reducer'
 
@@ -14,7 +14,17 @@ function AppProvider(props: { children: ReactNode }) {
     <AppContext.Provider value={{ state, dispatch }}>
       {props.children}
     </AppContext.Provider>
-  );
+  )
 }
 
-export { AppProvider, AppContext }
+function useApp() {
+  const context = useContext(AppContext)
+
+  if(context === undefined) {
+    throw new Error('useApp hook must be inside AppProvider')
+  }
+
+  return context 
+}
+
+export { AppProvider, useApp }

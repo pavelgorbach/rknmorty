@@ -1,17 +1,20 @@
-import { AppProvider } from './context/AppProvider'
+import { AppProvider } from './context/context'
+
+import Container from './components/Container'
 import Filter from './components/Filter'
 import Gallery from './components/Gallery'
-import Container from './components/Container'
+import CharacterCard from './components/CharacterCard'
 
 function App() {
   return (
-    <AppProvider>
-      <Container>
+    <Container>
+      <AppProvider>
         <Filter />
         <Gallery />
-      </Container>
-    </AppProvider>
-  );
+        <CharacterCard />
+      </AppProvider>
+    </Container>
+  )
 }
 
-export default App
+export default App 

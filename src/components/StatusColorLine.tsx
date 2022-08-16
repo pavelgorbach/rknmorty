@@ -1,4 +1,4 @@
-import { Status } from '../context/types'
+import { Status } from '../types'
 
 import styles from './StatusColorLine.module.css'
 

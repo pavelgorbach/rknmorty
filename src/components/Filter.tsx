@@ -1,50 +1,81 @@
-import { useState, useContext } from 'react'
+import { useState, useCallback, memo } from 'react'
 
-import { AppContext } from "../context/AppProvider"
+import { FilterParams } from '../types'
+import { useApp } from '../context/context'
+import { INITIAL_FILTER_PARAMS, setFilter } from '../context/reducer'
+
+import Button from "./Button"
 import FilterInput from "./FilterInput"
 import FilterSelect from "./FilterSelect"
-import Button from "./Button"
 
 import styles from './Filter.module.css'
+import { shallowObjEqual } from '../utils'
 
-export default function Filter() {
-  const { state, dispatch } = useContext(AppContext)
+const statusOptions = ['', 'alive', 'dead', 'unknown'] as FilterParams["status"][]
+const genderOptions = ['', 'male', 'female', 'genderless', 'unknown'] as FilterParams["gender"][]
+
+const Check = memo(() => <div>Check</div>)
+
+export default memo(function Filter() {
+  const { state: { filterParams }, dispatch } = useApp() 
+
+  const onChange = useCallback((params: Partial<FilterParams>) => {
+    dispatch(setFilter(params))
+  }, [dispatch])
+
+  const onReset = useCallback(() => {
+    dispatch(setFilter(INITIAL_FILTER_PARAMS))
+  }, [dispatch])
+
   const [isOpened, setOpen] = useState(false)
+  const disabledReset = !filterParams ? true : shallowObjEqual(filterParams || {}, INITIAL_FILTER_PARAMS)
     
-  const onFilterReset = () => {
-    dispatch({ type: 'SET_FILTER', payload: null })    
-  }
-
-  const toggleFilter = () => {
+  const onToggle = useCallback(() => {
     setOpen(!isOpened)
-  }
-
-  if(!isOpened) {
-    return (
-      <div className={styles.container}>
-        <div>Rick and Morty</div>
-        <div className={styles.filterButtonContainer}>
-          <div className={state.filter ? styles.green : styles.gray}></div>
-          <Button onClick={toggleFilter}>Filter</Button>
-        </div>
-      </div>
-    )
-  }
+  }, [isOpened])
 
   return (
     <div className={styles.container}>
-      <div>
-        <FilterInput name="name" />
-        <FilterInput name="species" />
-        <FilterInput name="type" />
-        <FilterSelect name="status" options={['alive', 'dead', 'unknown']}/>
-        <FilterSelect name="gender" options={['male', 'female', 'genderless', 'unknown']} />
+      <div className={styles.inputsContainer}>
+        <Check />
+        <FilterInput<FilterParams['name']>
+          label="name"
+          initialValue={INITIAL_FILTER_PARAMS.name}
+          onChange={onChange}
+        />
+          
+        {isOpened && (
+          <>
+            <FilterInput<FilterParams['species']>
+              label="species"
+              initialValue={INITIAL_FILTER_PARAMS.species}
+              onChange={onChange}
+            />
+            <FilterInput
+              label="type"
+              initialValue={INITIAL_FILTER_PARAMS.type}
+              onChange={onChange}
+            />
+            <FilterSelect<FilterParams['status']>
+              label="status"
+              initialValue={INITIAL_FILTER_PARAMS.status}
+              options={statusOptions}
+              onChange={onChange}
+            />
+            <FilterSelect<FilterParams['gender']>
+              label="gender"
+              initialValue={INITIAL_FILTER_PARAMS.gender}
+              options={genderOptions}
+              onChange={onChange} />
+          </>
+        )}
       </div>
-      <div className={styles.buttons}>
-        <div className={state.filter ? styles.green : styles.gray}></div>
-        <Button onClick={toggleFilter}>Close</Button>
-        <Button onClick={onFilterReset} disabled={!state.filter}>Reset</Button>
+
+      <div className={styles.buttonsContainer}>
+        <div className={styles.green}></div>
+        <Button onClick={onToggle}>{isOpened ? 'Close' : 'Filter'}</Button>
+        {isOpened && <Button onClick={onReset} disabled={disabledReset}>Reset</Button>}
       </div>
     </div>
   )
-}
+})

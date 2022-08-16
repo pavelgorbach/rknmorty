@@ -1,7 +1,7 @@
 .container {
-  margin-bottom: 3px;
   display: grid;
   grid-template-columns: 60px 1fr;
+  align-items: center;
 }
 
 .label {
@@ -10,5 +10,8 @@
 }
 
 .input {
+  min-height: 25px;
+  min-width: 50px;
   border: none;
+  box-sizing: border-box;
 }

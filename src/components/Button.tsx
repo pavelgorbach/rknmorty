@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styles from './Button.module.css'
 
 type Props = {
@@ -6,6 +7,6 @@ type Props = {
   onClick(): void
 }
 
-export default function Button({ children, disabled, onClick }: Props) {
+export default memo(function Button({ children, disabled, onClick }: Props) {
   return <button className={styles.container} disabled={disabled} onClick={onClick}>{children}</button>
-}
+})

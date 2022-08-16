@@ -1,29 +1,29 @@
-import { ChangeEvent, useContext } from "react"
-
-import { AppContext } from "../context/AppProvider"
-import { FilterParams } from "../context/reducer"
+import { ChangeEvent, memo, useCallback } from "react"
 
 import styles from  './FilterSelect.module.css'
 
-type Name = Pick<FilterParams, 'status' | 'gender'>
-interface Props<N, O> { name: N; options: O[]} 
+interface Props<T>{
+  label: string
+  initialValue: T
+  options: T[]
+  onChange: (value: {[name: string]: string}) => void
+}
 
-export default function FilterSelect<N extends keyof Name, O extends FilterParams[N]>({ name, options }: Props<N, O>) {
-  const { state, dispatch } = useContext(AppContext)
-
-  const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ type: 'SET_FILTER', payload: {[name]: e.target.value}})
-  }
+function FilterSelect<T extends string>(p: Props<T>) {
+  const onChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    p.onChange({[p.label]: e.target.value})
+  }, [p])
 
   return (
     <div className={styles.container}>
-      <label className={styles.label}>{name}</label>
-      <select value={state?.filter?.[name] || ''} onChange={onChange} className={styles.select}>
-        <option></option>
-        {options.map((option) => {
+      <label className={styles.label} htmlFor={p.label}>{p.label}</label>
+      <select className={styles.select} defaultValue={p.initialValue} id={p.label} onChange={onChange} >
+        {p.options.map((option) => {
           return <option key={option}>{option}</option>
         })}
       </select>
     </div>
   )
 }
+
+export default memo(FilterSelect) as typeof FilterSelect
