@@ -3,7 +3,7 @@ import { useState, useCallback, memo } from 'react'
 import { shallowObjEqual, debounce } from '../utils'
 import { FilterParams } from '../types'
 import { useApp } from '../context/context'
-import { INITIAL_FILTER_PARAMS, setFilter } from '../context/reducer'
+import { INITIAL_FILTER_PARAMS, patchFilter} from '../context/reducer'
 
 import Button from "./Button"
 import FilterInput from "./FilterInput"
@@ -20,7 +20,7 @@ export default memo(function Filter() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeDebounced = useCallback(
     debounce((filterParams) => {
-      dispatch(setFilter(filterParams))
+      dispatch(patchFilter(filterParams))
     }
   ), [])
 
@@ -29,11 +29,11 @@ export default memo(function Filter() {
   }, [onChangeDebounced])
 
   const onReset = useCallback(() => {
-    dispatch(setFilter(INITIAL_FILTER_PARAMS))
+    dispatch(patchFilter(INITIAL_FILTER_PARAMS))
   }, [dispatch])
 
   const [isOpened, setOpen] = useState(false)
-  const disabledReset = !filterParams ? true : shallowObjEqual(filterParams || {}, INITIAL_FILTER_PARAMS)
+  const disabledReset = !filterParams ? true : shallowObjEqual(filterParams, INITIAL_FILTER_PARAMS)
     
   const onToggle = useCallback(() => {
     setOpen(!isOpened)

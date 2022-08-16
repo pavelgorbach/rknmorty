@@ -22,12 +22,12 @@ export const INITIAL_FILTER_PARAMS: FilterParams = {
   gender: '',
 }
 
-export const setFilter = (payload: Partial<State['filterParams']>) => {
-  return { type: 'SET_FILTER' as const, payload }
+export const patchFilter = (payload: Partial<State['filterParams']>) => {
+  return { type: 'PATCH_FILTER' as const, payload }
 }
 
-export const setCharacters = (payload: State['characters']) => {
-  return { type: 'SET_CHARACTERS' as const, payload}
+export const patchCharacters = (payload: State['characters']) => {
+  return { type: 'PATCH_CHARACTERS' as const, payload}
 }
 
 export const setLoading = (payload: State['loading']) => {
@@ -60,24 +60,24 @@ export async function getCharactersAsync(p: {
       ]
     }
     
-    p.dispatch(setCharacters(updatedCharacters))
+    p.dispatch(patchCharacters(updatedCharacters))
     p.dispatch(setLoading(false))
   } catch(e) {
     console.info(e)
-    p.dispatch(setCharacters(undefined))
+    p.dispatch(patchCharacters(undefined))
     p.dispatch(setLoading(false))
   }
 }
 
 export type Actions =
-  | ReturnType<typeof setFilter>
-  | ReturnType<typeof setCharacters>
+  | ReturnType<typeof patchFilter>
+  | ReturnType<typeof patchCharacters>
   | ReturnType<typeof setLoading>
   | ReturnType<typeof selectCharacter>
 
 export default function appReducer(state: State = INITIAL_STATE, action: Actions): State {
   switch(action.type) {
-    case 'SET_FILTER':
+    case 'PATCH_FILTER':
       return {
         ...state,
         filterParams: {
@@ -85,7 +85,7 @@ export default function appReducer(state: State = INITIAL_STATE, action: Actions
           ...action.payload
         }
       }
-    case 'SET_CHARACTERS':
+    case 'PATCH_CHARACTERS':
       return {
         ...state,
         characters: action.payload
