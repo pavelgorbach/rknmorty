@@ -1,36 +1,39 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, memo, useCallback } from 'react'
 
-import { useApp } from '../context/context'
+import LazyImage from './LazyImage'
+import { Status } from '../types'
 
 import StatusColorLine from './StatusColorLine'
 
 import styles from './GalleryItem.module.css'
 
-export default function GalleryItem(p: {id: string}) {
-  const { state, dispatch } = useApp() 
+type Props ={
+  id: string
+  name: string
+  status: Status 
+  src: string
+  isActive: boolean
+  onClick(id: string): void
+}
+
+export default memo(function GalleryItem(p: Props) {
   const itemRef = useRef<HTMLElement>(null)
-  const character = state.characters?.items[p.id]
-  const isActive = state.selectedCharacter === p.id 
 
   useEffect(() => {
-    if(isActive) {
+    if(p.isActive) {
       itemRef.current?.scrollIntoView()
     } 
-  }, [isActive])
+  }, [p.isActive])
 
-  if(!character) {
-    return null
-  }
-
-  const onClick = () => {
-    dispatch({ type: 'SELECT_CHARACTER', payload: p.id })
-  }
-
+  const onItemClick = useCallback(() => {
+    p.onClick(p.id)
+  }, [p])
+  
   return (
-    <article ref={itemRef} className={[styles.container, isActive && styles.active ].join(' ')} onClick={onClick}>
-      <img alt={character.name} className={styles.img} src={character.image} />
-      <StatusColorLine status={character.status}/>
-      <div className={styles.title}>{character.name}</div>
+    <article ref={itemRef} className={[styles.container, p.isActive && styles.active ].join(' ')} onClick={onItemClick}>
+      <LazyImage alt={p.name} src={p.src} />
+      <StatusColorLine status={p.status}/>
+      <div className={styles.title}>{p.name}</div>
     </article>
   )
-}
+})

@@ -1,0 +1,10 @@
+.imgContainer {
+  background-color: yellow;
+} 
+
+.img {
+  display: block;
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}

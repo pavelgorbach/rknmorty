@@ -17,13 +17,6 @@
   filter: blur(5px);
 }
 
-.img {
-  display: block;
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-}
-
 .title {
   color: white;
   font-size: 12px;
