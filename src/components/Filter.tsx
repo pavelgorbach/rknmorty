@@ -33,8 +33,6 @@ export default memo(function Filter() {
 
   const [isOpened, setOpen] = useState(false)
   const isEqual = shallowObjEqual(filterParams || INITIAL_FILTER_PARAMS, INITIAL_FILTER_PARAMS)
-   console.log(INITIAL_FILTER_PARAMS) 
-   console.log(filterParams) 
   const onToggle = useCallback(() => {
     setOpen(!isOpened)
   }, [isOpened])
