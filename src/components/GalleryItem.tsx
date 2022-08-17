@@ -1,19 +1,17 @@
 import { useEffect, useRef, memo, useCallback } from 'react'
 
+import styles from './GalleryItem.module.scss'
+import { DTO } from '../types'
 import LazyImage from './LazyImage'
-import { Status } from '../types'
-
-import StatusColorLine from './StatusColorLine'
-
-import styles from './GalleryItem.module.css'
+import StatusColorLine, { STATUS_COLOR_MAP } from './ColorLine'
 
 type Props ={
-  id: string
+  id: DTO.CharacterId 
   name: string
-  status: Status 
   src: string
+  status: DTO.Character["status"]
   isActive: boolean
-  onClick(id: string): void
+  onClick(id: DTO.CharacterId): void
 }
 
 export default memo(function GalleryItem(p: Props) {
@@ -31,8 +29,8 @@ export default memo(function GalleryItem(p: Props) {
   
   return (
     <article ref={itemRef} className={[styles.container, p.isActive && styles.active ].join(' ')} onClick={onItemClick}>
-      <LazyImage alt={p.name} src={p.src} />
-      <StatusColorLine status={p.status}/>
+      <LazyImage alt={p.name} src={p.src} width={90} height={90} />
+      <StatusColorLine color={STATUS_COLOR_MAP[p.status]} />
       <div className={styles.title}>{p.name}</div>
     </article>
   )

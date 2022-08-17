@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect } from 'react'
 
-import styles from './LazyImage.module.css'
+import styles from './LazyImage.module.scss'
 
 type Props = {
   src: string
   alt: string
+  width: number
+  height: number
 }
 
 export default function LazyImage(p: Props) {
@@ -31,6 +33,6 @@ export default function LazyImage(p: Props) {
 
   // TODO: show placeholder while loading
   return (
-    <img alt={imgSrc} className={styles.img} src={imgSrc} />
+    <img alt={imgSrc} className={styles.img} src={imgSrc} width={90} height={90} />
   )
 }

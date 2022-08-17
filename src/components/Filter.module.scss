@@ -1,0 +1,66 @@
+$white: white; 
+$gray: rgb(60, 62, 68); 
+$green: #79B100;
+
+.container {
+  margin: 10px;
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  gap: 10px;
+}
+
+.buttonsContainer {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 1px;
+}
+
+.button {
+  min-height: 20px;
+  border: 1px solid $gray;
+  background-color: $white;
+
+  &:hover:not([disabled]) {
+    background-color: $gray;
+    color: $white;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    border: none;
+  }
+}
+
+.inputsContainer {
+  display: grid;
+  row-gap: 1px;
+}
+
+.formField{
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  align-items: center;
+}
+
+.label {
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.input {
+  min-height: 25px;
+  min-width: 50px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.green {
+  height: 3px;
+  background-color: $green;
+}
+
+.gray {
+  min-width: 5px;
+  min-height: 5px;
+  background-color: $gray;
+}

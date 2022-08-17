@@ -1,4 +1,20 @@
-export const debounce = <T extends (...args: any) => void>(func: T, wait: number = 500): T => {
+export const encodeQueryParams = (obj: Record<string, string | number | null>): string => { 
+  let result = []
+
+  for (let prop in obj) {
+    if (obj[prop] === '' || obj[prop] === null || obj[prop] === undefined) {
+      continue
+    }
+
+    result.push(`${prop}=${obj[prop]}`)
+  }
+
+  if (result.length === 0) return ''
+  
+  return `?${result.join('&')}`
+}
+
+export const debounce = <T extends (...args: any) => void>(func: T, wait: number = 1000): T => {
   let timer: NodeJS.Timeout
 
   const debouncedFn = (...args: any) => {

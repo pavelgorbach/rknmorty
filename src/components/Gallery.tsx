@@ -1,64 +1,57 @@
-import { useEffect, useCallback, UIEvent, memo } from "react"
+import { UIEvent } from "react"
 
-import { getCharactersAsync, selectCharacter } from "../context/reducer"
-import { useAppContext } from "../context/context"
+import styles from './Gallery.module.scss'
 
-import Empty from "./Empty"
 import Loader from "./Loader"
 import GalleryItem from "./GalleryItem"
+import { ICharactersGallery } from "../reducers/galleryReducer"
+import { DTO } from "../types"
 
-import styles from './Gallery.module.css'
+type Props = {
+  data: ICharactersGallery.Data
+  loadMore: ICharactersGallery.LoadMore
+  onItemClick: (characterId: DTO.CharacterId) => void
+}
 
-export default memo(function Gallery() {
-  const { state: { loading, characters, filterParams, selectedCharacter }, dispatch } = useAppContext()
-
-  useEffect(() => {
-    getCharactersAsync({ dispatch, filterParams })
-  }, [dispatch, filterParams ])
-  
-  const next = useCallback(async () => {
-    if(!characters?.info.next) return
-    getCharactersAsync({ dispatch, filterParams, characters, next: characters.info.next })
-  }, [characters, dispatch, filterParams])
-
-  const onItemClick = useCallback((id: string) => {
-    dispatch(selectCharacter(id))
-  }, [dispatch])
-
-  const onScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
+export default function Gallery(p: Props) {
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    if(p.loadMore.status !== 'can-load-more') return
     if(e.currentTarget.scrollHeight <= e.currentTarget.scrollTop + e.currentTarget.clientHeight) {
-      next()
+      p.loadMore.loadMore()
     }
-  }, [next])
+  } 
 
-  if (!characters || characters.info.count === 0) {
-    return (
-      <div className={styles.container}>
-        {loading && <Loader />}
-        <Empty />
-      </div>
-    )
+  if (p.data.status === 'loading') {
+    return <div className={styles.container}><Loader /></div>
+  }
+
+  if (p.data.status === 'no-data') {
+    return <div className={styles.container}>There is nothing here</div>
+  }
+
+  if (p.data.status === 'error') {
+    return <div className={styles.container}>Something went wrong</div>
   }
 
   return (
     <div className={styles.container}>
-      {loading && <Loader />}
+      {p.loadMore.status === 'loading-more' && <Loader />}
+
       <div className={styles.itemsContainer} onScroll={onScroll}>
-        {characters.ids.map((id) => {
-          const character = characters.items[id] 
+        {p.data.characters.map((item) => {
           return (
             <GalleryItem
-              key={id}
-              id={id}
-              name={character.name}
-              status={character.status}
-              src={character.image}
-              onClick={onItemClick}
-              isActive={selectedCharacter === id}
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              status={item.status}
+              src={item.image}
+              onClick={p.onItemClick}
+              isActive={false}
             />
           )
         })}
       </div>
     </div>
   )
-})
+}

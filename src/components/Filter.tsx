@@ -1,84 +1,102 @@
-import { useState, useCallback, memo } from 'react'
+import { useState, useCallback, useRef, memo } from 'react'
 
-import { shallowObjEqual, debounce } from '../utils'
+import styles from './Filter.module.scss'
+
 import { FilterParams } from '../types'
-import { useAppContext } from '../context/context'
-import { INITIAL_FILTER_PARAMS, patchFilter} from '../context/reducer'
-
-import Button from "./Button"
+import { shallowObjEqual } from '../utils'
 import FilterInput from "./FilterInput"
 import FilterSelect from "./FilterSelect"
+import ColorLine from './ColorLine'
 
-import styles from './Filter.module.css'
+type Props = {
+  onChange(params: FilterParams): void
+}
+
+export const INITIAL_FILTER_PARAMS: FilterParams = {
+  name: '',
+  species: '',
+  status: '',
+  type: '',
+  gender: '',
+}
 
 const statusOptions = ['', 'alive', 'dead', 'unknown'] as FilterParams["status"][]
 const genderOptions = ['', 'male', 'female', 'genderless', 'unknown'] as FilterParams["gender"][]
 
-export default memo(function Filter() {
-  const { state: { filterParams }, dispatch } = useAppContext() 
+const Button = memo((p: { children: string; for?: string; disabled?: boolean; onClick?(e: any): void }) => {
+  return <button className={styles.button} disabled={p.disabled} onClick={p.onClick}>{p.children}</button>
+})
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onChangeDebounced = useCallback(
-    debounce((filterParams) => {
-      dispatch(patchFilter(filterParams))
-    }
-  ), [])
-
+export default memo(function Filter(p: Props) {
+  const formRef = useRef<HTMLFormElement>(null)
+  const filterParams = useRef<FilterParams>(INITIAL_FILTER_PARAMS)
+  const [isOpen, setOpen] = useState(false)
+  const [isDirty, setDirty] = useState(false)
+  
   const onChange = useCallback((params: Partial<FilterParams>) => {
-    onChangeDebounced(params)
-  }, [onChangeDebounced])
-
-  const onReset = useCallback(() => {
-    dispatch(patchFilter(INITIAL_FILTER_PARAMS))
-  }, [dispatch])
-
-  const [isOpened, setOpen] = useState(false)
-  const disabledReset = !filterParams ? true : shallowObjEqual(filterParams, INITIAL_FILTER_PARAMS)
+    const updatedParams = {
+      ...filterParams.current,
+      ...params
+    }
+    filterParams.current = updatedParams
+    p.onChange(updatedParams)
     
-  const onToggle = useCallback(() => {
-    setOpen(!isOpened)
-  }, [isOpened])
+    setDirty(x => !shallowObjEqual(filterParams.current, INITIAL_FILTER_PARAMS))
+  },[p])
+
+  const reset = useCallback((e: any) => {
+    formRef.current?.reset()
+    onChange(INITIAL_FILTER_PARAMS)
+  }, [onChange])
+
+  const toggle = useCallback(() => setOpen((x) => !x), [] )
 
   return (
     <div className={styles.container}>
-      <div className={styles.inputsContainer}>
-        <FilterInput<FilterParams['name']>
-          label="name"
-          initialValue={INITIAL_FILTER_PARAMS.name}
-          onChange={onChange}
-        />
-          
-        {isOpened && (
-          <>
-            <FilterInput<FilterParams['species']>
-              label="species"
-              initialValue={INITIAL_FILTER_PARAMS.species}
-              onChange={onChange}
-            />
-            <FilterInput
-              label="type"
-              initialValue={INITIAL_FILTER_PARAMS.type}
-              onChange={onChange}
-            />
-            <FilterSelect<FilterParams['status']>
-              label="status"
-              initialValue={INITIAL_FILTER_PARAMS.status}
-              options={statusOptions}
-              onChange={onChange}
-            />
-            <FilterSelect<FilterParams['gender']>
-              label="gender"
-              initialValue={INITIAL_FILTER_PARAMS.gender}
-              options={genderOptions}
-              onChange={onChange} />
-          </>
-        )}
-      </div>
+      <form ref={formRef}>
+        <div className={styles.inputsContainer}>
+          <FilterInput<FilterParams['name']>
+            name="name"
+            initialValue={INITIAL_FILTER_PARAMS.name}
+            onChange={onChange}
+          />
+            
+          {isOpen && (
+            <>
+              <FilterInput<FilterParams['species']>
+                name="species"
+                initialValue={INITIAL_FILTER_PARAMS.species}
+                onChange={onChange}
+              />
+              <FilterInput
+                name="type"
+                initialValue={INITIAL_FILTER_PARAMS.type}
+                onChange={onChange}
+              />
+              <FilterSelect<FilterParams['status']>
+                name="status"
+                initialValue={INITIAL_FILTER_PARAMS.status}
+                options={statusOptions}
+                onChange={onChange}
+              />
+              <FilterSelect<FilterParams['gender']>
+                name="gender"
+                initialValue={INITIAL_FILTER_PARAMS.gender}
+                options={genderOptions}
+                onChange={onChange}
+              />
+            </>
+          )}
+        </div>
+      </form>
 
       <div className={styles.buttonsContainer}>
-        <div className={styles.green}></div>
-        <Button onClick={onToggle}>{isOpened ? 'Close' : 'Filter'}</Button>
-        {isOpened && <Button onClick={onReset} disabled={disabledReset}>Reset</Button>}
+        <ColorLine color={isDirty ? 'green' : 'yellow'} />
+        <Button onClick={toggle}>{isOpen ? 'Close' : 'Filter'}</Button>
+
+        {isOpen && (
+          <Button onClick={reset} disabled={!isDirty}>Reset</Button>
+        )}
       </div>
     </div>
   )

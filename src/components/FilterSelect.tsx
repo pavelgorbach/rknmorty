@@ -1,9 +1,9 @@
 import { ChangeEvent, memo, useCallback } from "react"
 
-import styles from  './FilterSelect.module.css'
+import styles from  './FilterSelect.module.scss'
 
 interface Props<T>{
-  label: string
+  name: string
   initialValue: T
   options: T[]
   onChange: (value: {[name: string]: string}) => void
@@ -11,13 +11,13 @@ interface Props<T>{
 
 function FilterSelect<T extends string>(p: Props<T>) {
   const onChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-    p.onChange({[p.label]: e.target.value})
+    p.onChange({[p.name]: e.target.value})
   }, [p])
 
   return (
     <div className={styles.container}>
-      <label className={styles.label} htmlFor={p.label}>{p.label}</label>
-      <select className={styles.select} defaultValue={p.initialValue} id={p.label} onChange={onChange} >
+      <label className={styles.label} htmlFor={p.name}>{p.name}</label>
+      <select className={styles.select} defaultValue={p.initialValue} id={p.name} onChange={onChange} >
         {p.options.map((option) => {
           return <option key={option}>{option}</option>
         })}
