@@ -16,7 +16,6 @@ const genderOptions = ['', 'male', 'female', 'genderless', 'unknown'] as FilterP
 
 export default memo(function Filter() {
   const { state: { filterParams }, dispatch } = useAppContext() 
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeDebounced = useCallback(
     debounce((filterParams) => {
@@ -33,8 +32,9 @@ export default memo(function Filter() {
   }, [dispatch])
 
   const [isOpened, setOpen] = useState(false)
-  const disabledReset = !filterParams ? true : shallowObjEqual(filterParams, INITIAL_FILTER_PARAMS)
-    
+  const isEqual = shallowObjEqual(filterParams || INITIAL_FILTER_PARAMS, INITIAL_FILTER_PARAMS)
+   console.log(INITIAL_FILTER_PARAMS) 
+   console.log(filterParams) 
   const onToggle = useCallback(() => {
     setOpen(!isOpened)
   }, [isOpened])
@@ -76,9 +76,9 @@ export default memo(function Filter() {
       </div>
 
       <div className={styles.buttonsContainer}>
-        <div className={styles.green}></div>
+        <div className={isEqual ? styles.gray : styles.green}></div>
         <Button onClick={onToggle}>{isOpened ? 'Close' : 'Filter'}</Button>
-        {isOpened && <Button onClick={onReset} disabled={disabledReset}>Reset</Button>}
+        {isOpened && <Button onClick={onReset} disabled={isEqual}>Reset</Button>}
       </div>
     </div>
   )
