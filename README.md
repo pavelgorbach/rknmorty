@@ -1,6 +1,6 @@
 # Rick and Morty Widget
 
-This project was bootstrapped with Create React App and available [here]()
+This project was bootstrapped with Create React App and available [here](https://rknmorty.web.app/)
 
 
 [Rick and Morty API](https://rickandmortyapi.com/)
